@@ -1,0 +1,12 @@
+{# templates/breach_directory/error.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Une erreur est survenue</h1>
+    <p>{{ error }}</p>
+    <a href="{{ path('app_homepage') }}">Retour à l'accueil</a>
+</div>
+{% endblock %}

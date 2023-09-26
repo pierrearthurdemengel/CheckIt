@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vérification de Sécurité{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Vérifiez si votre email a été exposé dans une violation de données</h1>
+    
+    {{ form_start(form, {'action': path('results'), 'method': 'get'}) }}
+    {{ form_row(form.email) }}
+    <button type="submit" class="btn btn-primary">Vérifier</button>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

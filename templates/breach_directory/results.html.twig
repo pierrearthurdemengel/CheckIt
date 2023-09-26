@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Résultats{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Résultats de la vérification</h1>
+    
+    {% if content.success %}
+        {% if content.found == 0 %}
+            <p>Aucune violation de données trouvée pour l'e-mail fourni.</p>
+        {% else %}
+            <p>{{ content.found }} violations de données trouvées :</p>
+            <ul>
+                {% for violation in content.result %}
+                    <li>
+                        <strong>{{ violation.sources is defined ? violation.sources|join(', ') : 'Source inconnue' }}</strong>
+                        {% if violation.has_password %}
+                            <p>Le mot de passe exposé: {{ violation.password }}</p>
+                        {% endif %}
+                        <p>SHA1: {{ violation.sha1 }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <p>Une erreur est survenue lors de la récupération des données. Veuillez réessayer plus tard.</p>
+    {% endif %}
+    
+</div>
+{% endblock %}
