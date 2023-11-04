@@ -1,11 +1,12 @@
 <?php
-
-namespace App\Form;
+namespace App\FormType;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class EmailCheckType extends AbstractType
 {
@@ -23,6 +24,12 @@ class EmailCheckType extends AbstractType
     
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults([
+            'constraints' => [
+                new Email([
+                    'message' => 'L\'adresse email "{{ value }}" n\'est pas valide.',
+                ]),
+            ],
+        ]);
     }
 }

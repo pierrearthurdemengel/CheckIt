@@ -6,23 +6,36 @@
 <div class="container">
     <h1>Résultats de la vérification</h1>
     
-    {% if content.success %}
-        {% if content.found == 0 %}
-            <p>Aucune violation de données trouvée pour l'e-mail fourni.</p>
-        {% else %}
-            <p>{{ content.found }} violations de données trouvées :</p>
-            <ul>
-                {% for violation in content.result %}
-                    <li>
-                        <strong>{{ violation.sources is defined ? violation.sources|join(', ') : 'Source inconnue' }}</strong>
-                        {% if violation.has_password %}
-                            <p>Le mot de passe exposé: {{ violation.password }}</p>
-                        {% endif %}
-                        <p>SHA1: {{ violation.sha1 }}</p>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+    {% if status_code == 404 %}
+        <p>Aucune violation de données trouvée pour l'e-mail fourni.</p>
+    {% elseif content is iterable and content is not empty %}
+        <p>{{ content|length }} violations de données trouvées :</p>
+        <ul>
+            {% for violation in content %}
+            <strong></strong>
+                <li>
+                    <strong>{{ violation.Title }}</strong>
+                    <p>Domaine: {{ violation.Domain }}</p>
+                    <p>Date de la violation: {{ violation.BreachDate|date("d/m/Y") }}</p>
+                    <p>Description: {{ violation.Description|raw }}</p>
+                    <img src="{{ violation.LogoPath }}" alt="Logo de {{ violation.Name }}" style="max-width: 100px; max-height: 100px;">
+                    <p>Données exposées :</p>
+                    <ul>
+                        {% for dataClass in violation.DataClasses %}
+                            <li>{{ dataClass }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>Nombre total de comptes compromis: {{ violation.PwnCount }}</p>
+                    <p>Est vérifié: {{ violation.IsVerified ? 'Oui' : 'Non' }}</p>
+                    <p>Est fabriqué: {{ violation.IsFabricated ? 'Oui' : 'Non' }}</p>
+                    <p>Est sensible: {{ violation.IsSensitive ? 'Oui' : 'Non' }}</p>
+                    <p>Est retiré: {{ violation.IsRetired ? 'Oui' : 'Non' }}</p>
+                    <p>Est une liste de spam: {{ violation.IsSpamList ? 'Oui' : 'Non' }}</p>
+                    <p>Est un logiciel malveillant: {{ violation.IsMalware ? 'Oui' : 'Non' }}</p>
+                    <p>L'abonnement est gratuit: {{ violation.IsSubscriptionFree ? 'Oui' : 'Non' }}</p>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
         <p>Une erreur est survenue lors de la récupération des données. Veuillez réessayer plus tard.</p>
     {% endif %}
